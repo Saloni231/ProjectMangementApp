@@ -1,63 +1,163 @@
 import { useNavigate } from "react-router-dom";
-import { BackwardIcon, ArrowUpIcon } from "@heroicons/react/24/solid";
-import Input from "../UI/Input";
+import {
+  BackwardIcon,
+  FaceFrownIcon,
+  PlusIcon,
+} from "@heroicons/react/24/solid";
+import InputField from "../UI/Input";
 import TableHeader from "../UI/TableHeader";
+import Heading from "../UI/Heading";
+import Button from "../UI/Button";
+import Modal from "../UI/Modal";
+import { useState } from "react";
+import SelectField from "../UI/SelectField";
+import MultiSelectDropdown from "../UI/MultiSelect";
 
 const Projects: React.FC = () => {
+  const [projectName, setProjectName] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [status, setStatus] = useState("");
+  const [teamMember, setTeamMember] = useState<string[]>([]);
+
   const navigate = useNavigate();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     navigate(-1);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-violet-800 justify-items-center font-sans">
-      <button
-        className="fixed top-4 left-4 text-violet-950 hover:text-black hover:-translate-y-1 text-sm flex items-center"
-        onClick={handleClick}
-      >
-        <BackwardIcon className="h-4 w-4" />
-        Back
-      </button>
+  const handleCreate = () => {
+    setStatus("");
+    setTeamMember([]);
+    setModalOpen(true);
+  };
 
-      <h1 className="font-bold text-2xl text-violet-950 mt-10">PROJECT LIST</h1>
-      <div className="lg:w-10/12 sm:w-full">
-        <div className="flex my-4 justify-between">
-          <Input placeholder={"Search.."} />
-          <select className="p-1 border-2 border-violet-950 rounded-lg px-2 m-2 text-violet-950 font-semibold">
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="OnHold">On Hold</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </div>
-        <div className="w-full overflow-x-auto">
-          <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden border border-gray-200 rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700">
-                <thead className="bg-purple-100 text-purple-700">
-                  <tr>
-                    <th className="px-4 py-3 whitespace-nowrap">Status</th>
-                    <th className="px-4 py-3 whitespace-nowrap">Start Date</th>
-                    <th className="px-4 py-3 whitespace-nowrap">End Date</th>
-                    <th className="px-4 py-3 whitespace-nowrap">
-                      Team Members
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
-                  <tr>
-                    <td className="px-4 py-3">In Progress</td>
-                    <td className="px-4 py-3">2025-06-01</td>
-                    <td className="px-4 py-3">2025-07-15</td>
-                    <td className="px-4 py-3">Alice, Bob</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+  const handleSubmit = () => {
+    console.log(
+      projectName,
+      projectDescription,
+      startDate,
+      endDate,
+      status,
+      teamMember
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-white to-purple-500 px-4 py-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <button
+          onClick={handleClick}
+          className="text-md text-purple-700 font-medium flex items-center hover:underline hover:text-black hover:-translate-y-1"
+        >
+          <BackwardIcon className="w-5 h-5" /> Back
+        </button>
+
+        <h1 className="text-xl sm:text-2xl font-bold text-purple-900 text-center">
+          PROJECT LIST
+        </h1>
+        <Button classList="flex items-center gap-2" onClickFunc={handleCreate}>
+          <PlusIcon className="w-4 h-4" />
+          Create Project
+        </Button>
       </div>
+
+      {true && (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 max-w-6xl mx-auto mt-10">
+            <input
+              type="text"
+              className={
+                "w-full sm:w-1/3 px-4 py-2 border border-purple-900 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 text-violet-900 font-semibold"
+              }
+              placeholder={"Search.."}
+            />
+            <select className="w-full sm:w-1/6 px-4 py-2 border border-purple-900 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 text-violet-900 font-semibold">
+              <option value="All">All</option>
+              <option value="Active">Active</option>
+              <option value="OnHold">On Hold</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <div className="overflow-x-auto max-w-6xl mx-auto">
+            <table className="min-w-[640px] w-full border border-purple-300 text-sm text-left bg-white rounded shadow">
+              <thead className="bg-purple-100 text-violet-800">
+                <tr>
+                  <TableHeader>Project Name</TableHeader>
+                  <TableHeader>Status</TableHeader>
+                  <TableHeader sortIcon>Start Date</TableHeader>
+                  <TableHeader sortIcon>End Date</TableHeader>
+                  <TableHeader sortIcon>Team Members</TableHeader>
+                  <TableHeader>Actions</TableHeader>
+                </tr>
+              </thead>
+              <tbody className="text-purple-900"></tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      {false && (
+        <div className="flex flex-col items-center justify-center h-[50vh] text-center px-4">
+          <FaceFrownIcon className="w-16 h-16 text-violet-950 mb-4" />
+          <Heading>No Projects Found</Heading>
+          <p className="text-lg sm:text-base text-black m-5 max-w-md">
+            Create New One!!
+          </p>
+        </div>
+      )}
+
+      <Modal
+        title="Create Project"
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      >
+        <InputField
+          placeholder="projectName"
+          label="Project Name"
+          type="text"
+          value={projectName}
+          handleChange={setProjectName}
+        />
+        <InputField
+          placeholder="projectDescription"
+          label="Project Description"
+          type="textarea"
+          value={projectDescription}
+          handleChange={setProjectDescription}
+        />
+        <InputField
+          placeholder="startDate"
+          label="Start Date"
+          type="date"
+          value={startDate}
+          handleChange={setStartDate}
+        />
+        <InputField
+          placeholder="endDate"
+          label="End Date"
+          type="date"
+          value={endDate}
+          handleChange={setEndDate}
+        />
+        <SelectField
+          label="Status"
+          selected={status}
+          placeholder="status"
+          options={["Active", "On Hold", "Completed"]}
+          handleSelect={setStatus}
+        />
+        <MultiSelectDropdown
+          label="Team Members"
+          selectedValues={teamMember}
+          onSelect={setTeamMember}
+        />
+        <Button onClickFunc={handleSubmit} classList="mt-5 w-full">
+          Create
+        </Button>
+      </Modal>
     </div>
   );
 };
