@@ -8,7 +8,6 @@ This is a simple React application for managing projects using a JSON Server for
 
 ```bash
 git clone https://github.com/Saloni231/ProjectMangementApp.git
-cd your-repo-name
 ```
 
 ### 2. Install Dependencies
