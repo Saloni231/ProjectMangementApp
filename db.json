@@ -1,0 +1,27 @@
+{
+  "Projects": [
+    {
+      "id": "c8c9",
+      "projectName": "Spiralyz",
+      "projectDescription": "Building Responsive Website",
+      "startDate": "2025-06-04",
+      "endDate": "2025-06-21",
+      "status": "Active",
+      "teamMember": [
+        "Rahul Mehta",
+        "Neha Sharma",
+        "Amit Patel"
+      ]
+    }
+  ],
+  "TeamMembers": [
+    "Rahul Mehta",
+    "Neha Sharma",
+    "Amit Patel",
+    "Priya Sinha",
+    "Samantha Jones",
+    "Emily Carter",
+    "Ananya Singh",
+    "Liam Walker"
+  ]
+}

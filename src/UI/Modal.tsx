@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, title, children, onClose }) => {
         >
           <XMarkIcon className="h-5 w-5" />
         </button>
-        <h1 className="text-xl sm:text-2xl font-bold text-purple-900 text-center">
+        <h1 className="text-xl sm:text-2xl font-bold text-purple-950 text-center">
           {title}
         </h1>
         <div>{children}</div>

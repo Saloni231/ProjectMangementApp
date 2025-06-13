@@ -3,25 +3,42 @@ import React, { useState, useRef, useEffect } from "react";
 interface MultiSelectProps {
   label: string;
   selectedValues: string[];
-  onSelect: Function;
+  onSelect?: (values: string[]) => void;
+  name?: string;
+  onChange?: (value: string[]) => void;
+  onBlur?: () => void;
+  inputRef?: React.Ref<HTMLInputElement>;
+  error?: string;
 }
 
 const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
   label,
   selectedValues,
   onSelect,
+  name,
+  onChange,
+  onBlur,
+  inputRef,
+  error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const options = ["React", "Vue", "Angular", "Svelte"];
+  const optionsData = localStorage.getItem("teamMembers");
+  let options: string[] = [];
+  if (optionsData) {
+    options = JSON.parse(optionsData);
+  }
 
   const handleSelect = (value: string) => {
+    let updatedValues;
     if (selectedValues.includes(value)) {
-      onSelect(selectedValues.filter((v) => v !== value));
+      updatedValues = selectedValues.filter((v) => v !== value);
     } else {
-      onSelect([...selectedValues, value]);
+      updatedValues = [...selectedValues, value];
     }
+    onChange?.(updatedValues);
+    onSelect?.(updatedValues);
   };
 
   const isSelected = (value: string) => selectedValues.includes(value);
@@ -47,6 +64,9 @@ const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         value={selectedValues.join(", ")}
         placeholder=" "
+        onBlur={onBlur}
+        name={name}
+        ref={inputRef}
         className="peer w-full border border-violet-950 bg-white px-3 pt-6 pb-2 text-violet-950 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-700 cursor-pointer"
       />
 
@@ -63,23 +83,25 @@ const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
 
       {isOpen && (
         <ul className="absolute z-10 mt-1 w-full bg-white border border-violet-950 rounded-md shadow-md max-h-40 overflow-y-auto">
-          {options.map((option) => (
-            <li
-              key={option}
-              onClick={() => handleSelect(option)}
-              className="px-4 py-2 hover:bg-violet-50 cursor-pointer flex items-center"
-            >
-              <input
-                type="checkbox"
-                checked={isSelected(option)}
-                readOnly
-                className="mr-2"
-              />
-              {option}
-            </li>
-          ))}
+          {options.length > 0 &&
+            options.map((option) => (
+              <li
+                key={option}
+                onClick={() => handleSelect(option)}
+                className="px-4 py-2 hover:bg-violet-50 cursor-pointer flex items-center"
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected(option)}
+                  readOnly
+                  className="mr-2"
+                />
+                {option}
+              </li>
+            ))}
         </ul>
       )}
+      {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
     </div>
   );
 };
