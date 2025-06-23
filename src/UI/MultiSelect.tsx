@@ -11,6 +11,11 @@ interface MultiSelectProps {
   error?: string;
 }
 
+type option = {
+  id: number;
+  name: string;
+};
+
 const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
   label,
   selectedValues,
@@ -25,7 +30,7 @@ const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const optionsData = localStorage.getItem("teamMembers");
-  let options: string[] = [];
+  let options: option[] = [];
   if (optionsData) {
     options = JSON.parse(optionsData);
   }
@@ -86,17 +91,17 @@ const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
           {options.length > 0 &&
             options.map((option) => (
               <li
-                key={option}
-                onClick={() => handleSelect(option)}
+                key={option.id}
+                onClick={() => handleSelect(option.name)}
                 className="px-4 py-2 hover:bg-violet-50 cursor-pointer flex items-center"
               >
                 <input
                   type="checkbox"
-                  checked={isSelected(option)}
+                  checked={isSelected(option.name)}
                   readOnly
                   className="mr-2"
                 />
-                {option}
+                {option.name}
               </li>
             ))}
         </ul>

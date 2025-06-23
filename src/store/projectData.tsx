@@ -109,12 +109,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     fetch(URL)
       .then((res) => res.json())
-      .then((data) => setProjects(data));
+      .then((data) => setProjects(data))
+      .catch((err) => console.log(err));
     fetch("http://localhost:5000/TeamMembers")
       .then((res) => res.json())
-      .then((data) =>
-        localStorage.setItem("teamMembers", JSON.stringify(data))
-      );
+      .then((data) => localStorage.setItem("teamMembers", JSON.stringify(data)))
+      .catch((err) => console.log(err));
   }, []);
 
   const value = {
